@@ -322,6 +322,13 @@ workflow {
         ref_fai = Channel.empty()
         ref_mmi = Channel.empty()
     }
+    
+    // Prepare the poly(A) config if provided
+    if (params.poly_a_config){
+        poly_a_config = Channel.fromPath(params.poly_a_config, checkIfExists: true)
+    } else {
+        poly_a_config = Channel.fromPath("${projectDir}/data/OPTIONAL_FILE")
+    }
 
     // ring ring it's for you
     basecaller_out = wf_dorado([
@@ -337,7 +344,7 @@ workflow {
         "watch_path": params.watch_path,
         "output_fmt": params.output_fmt,
         "dorado_ext": params.dorado_ext,
-        "poly_a_config": params.poly_a_config,
+        "poly_a_config": poly_a_config | collect,
         "qscore_filter": params.qscore_filter
     ])
     software_versions = getVersions()
@@ -401,7 +408,8 @@ workflow {
             )
             | flatten
             | collectFile(name: "file-names.txt", newLine: true, sort: false)
-        igv_conf = configure_igv(igv_files, Channel.of(null), Channel.of(null), Channel.of(null))
+        boolean keep_track_order = false
+        igv_conf = configure_igv(igv_files, Channel.of(null), Channel.of(null), Channel.of(null), keep_track_order)
         // If the input reference is compressed, or the input fasta does not exists, emit faidx
         if (params.ref.toLowerCase().endsWith("gz") || !file("${params.ref}.fai").exists()){
             igv_conf = igv_conf
