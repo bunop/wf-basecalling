@@ -4,6 +4,19 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [v1.5.4]
+This patch update to wf-basecalling fixes the "Not a valid path value type" error observed by some users when demultiplexing, and updates Dorado to v1.1.1 to benefit from improved HAC basecalling speed. It is recommended that users update to this version to keep up to date with Dorado's model and basecalling performance improvements.
+
+### Changed
+- Memory requirements reduced to account for cloud instances expressing capacity in GiB.
+- Updated Dorado to [v1.1.1](https://github.com/nanoporetech/dorado/releases/tag/v1.1.1):
+    - Update to improved 5mC_5hmC and 5mCG_5hmCG modified base models for DNA v5.2.0 HAC and SUP.
+    - Improve speed of HAC basecalling models on a range of Nvidia GPUs.
+
+### Fixed
+- `store_dir` parameter format incorrectly declared in the schema. This does not affect this workflow as it does not use the storeDir directive and has been changed to maintain compliance with our latest testing standard.
+-  `Not a valid path value type: org.codehaus.groovy.runtime.NullObject (null)` when demuxing and outputting FASTQ without performing alignment. FASTQ is now correctly demuxed into the expected folder output. 
+
 ## [v1.5.3]
 This release of wf-basecalling is made to support the development of other EPI2ME workflows that handle their own Poly(A) configuration. Users do not need to adopt this release.
 ### Changed
