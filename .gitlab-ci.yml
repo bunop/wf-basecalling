@@ -13,10 +13,10 @@ variables:
 check-models:
     extends: .preflight
     script:
-        - !reference [.install, nextflow] # requires nextflow to read config
-        - bash util/update_models_schema.sh . docker
+        - !reference [.install, scripts]
+        - bash util/update_models_schema.sh .
         - >
-            if ! diff nextflow_schema.json nextflow_schema.json.new; then
+            if ! diff -b nextflow_schema.json nextflow_schema.json.new; then
                 echo "Model schema requires updating."
                 exit 1
             fi
