@@ -4,6 +4,23 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [v1.5.8]
+This patch release of wf-basecalling permits additional kit names for demultiplexing, and updates the version of Dorado to v1.4.0 introducing the RNA v5.3 models.
+
+### Changed
+- Updated Dorado to [v1.4.0](https://github.com/nanoporetech/dorado/releases/tag/v1.4.0).
+  - Introduces support for RNA v5.3.0 basecalling models.
+  - Includes all fixes from Dorado [v1.3.1](https://github.com/nanoporetech/dorado/releases/tag/v1.3.1).
+    - Several dorado output formats have been changed to align with the [`26.01 ONT Output Specifications`](https://nanoporetech.github.io/ont-output-specifications/26.01/).
+- Updated to wf-template v5.7.1 to maintain compliance with our latest wf-template standard, changing:
+    - The README docs sections to move related protocols after inputs and outputs.
+    - Links in the README to point at our new documentation website.
+    - Our pre-commit configuration to resolve a dependency issue in our test infrastructure.
+### Added
+- `barcode_kit` now permits `TWIST-96-B`, `TWIST-96-C` and `TWIST-96-D` barcode kits.
+### Fixed
+- Fixes crash in Dorado demux for BAMs without RG lines.
+
 ## [v1.5.7]
 This patch release of wf-basecalling permits additional kit names for demultiplexing. The version of Dorado and its models are unchanged.
 
