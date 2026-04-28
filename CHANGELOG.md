@@ -4,6 +4,11 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [v1.5.9]
+This release of wf-basecalling is made to support the development of other EPI2ME workflows that require support for additional entrypoint functionality and updates to ezCharts. Users do not need to adopt this release.
+### Changed
+- Updated to wf-template v6.0.0 to maintain compliance with our latest wf-template standard. This does not directly affect functionality of the workflow.
+
 ## [v1.5.8]
 This patch release of wf-basecalling permits additional kit names for demultiplexing, and updates the version of Dorado to v1.4.0 introducing the RNA v5.3 models.
 
