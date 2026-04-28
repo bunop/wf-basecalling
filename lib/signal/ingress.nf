@@ -77,6 +77,7 @@ process dorado {
 
     # Run dorado on the new pod5s
     dorado ${caller} \
+        --models-directory \${DRD_MODELS_PATH} \
         ${model_arg} \
         ${signal_path} \
         ${remora_args} \
@@ -276,7 +277,7 @@ workflow wf_dorado {
             index_ext = "bai"
         }
         output_exts = Channel.of([align_ext, index_ext]).collect()
-        
+
         // Munge models
         // I didn't want to use the same trick from wf-humvar as I thought the models here are much larger
         // ...they aren't, but nevermind this is less hilarious than the humvar way
@@ -348,7 +349,7 @@ workflow wf_dorado {
             // Split the name keeping the flow cell, run, pass/fail and pod5 index.
             branched_patterns.pattern_long
                 // If the pattern is long, extract flow cell, run, pass/fail and index
-                .map{filename -> 
+                .map{filename ->
                     fields = filename.baseName.split("_")
                     [fields[-1] as int, fields[0], fields[3], fields[1], filename]
                 }
@@ -360,7 +361,7 @@ workflow wf_dorado {
                             [fields[-1] as int, fields[0], fields[1], 'pass', filename]
                         }
                 )
-                // Computed chunk index as floored pod5 index / chunk size value, and then concatenate them. 
+                // Computed chunk index as floored pod5 index / chunk size value, and then concatenate them.
                 // If not pass is provided, treat all as pass. The chunk number goes first to perform chunk
                 // clustering appropriately.
                 .map{ pod5_index, cell_id, run_id, pass, pod5 ->
@@ -386,7 +387,7 @@ workflow wf_dorado {
         if (params.use_bonito) {
             called_bams = bonito(
                 ready_pod5_chunks,
-                tuple(margs.basecaller_model_name, basecaller_model, basecaller_model_override), 
+                tuple(margs.basecaller_model_name, basecaller_model, basecaller_model_override),
             )
         } else {
             called_bams = dorado(
@@ -399,7 +400,7 @@ workflow wf_dorado {
 
         // Compute summary
         if (params.dorado_ext == 'pod5' && params.duplex){
-            dorado_summary(called_bams.ubams) | collect | combine_dorado_summaries    
+            dorado_summary(called_bams.ubams) | collect | combine_dorado_summaries
             summary = combine_dorado_summaries.out.summary
         } else {
             summary = Channel.fromPath("${projectDir}/data/OPTIONAL_FILE")
